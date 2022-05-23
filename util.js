@@ -1,3 +1,5 @@
+
+// translate x and y in unit coordinates to canvas coordinates
 export function translateToCanvas(x, y){
 
     var canvas = document.getElementById("gameui");
@@ -9,10 +11,25 @@ export function translateToCanvas(x, y){
     return [_x, _y];
 }
 
+// translate a rectangle specifier into canvas coordinates
+export function getTranslatedRectangle(rect){
+    var [canvas_x, canvas_y] = translateToCanvas(rect.x, rect.y);
+    var [canvas_w, canvas_h] = translateToCanvas(rect.width, rect.height);
+
+    return [
+        canvas_x,
+        canvas_y,
+        canvas_w,
+        canvas_h
+    ];
+}
+
+// get the canvas
 export function getCanvas(){
     return document.getElementById("gameui");
 }
 
+// get the canvas context
 export function getContext(){
     var canvas = document.getElementById("gameui");
     var context = canvas.getContext('2d');
@@ -20,16 +37,17 @@ export function getContext(){
     return context;
 }
 
+// determine if a point intersects with a rectangle
 export function pointInRectangle(P, R){
-    var within_x = P.x > R.x && P.x < (R.x + R.w);
-    var within_y = P.y > R.y && P.y < (R.y + R.h);
+    var within_x = P[0] > R[0] && P[0] < (R[0] + R[2]);
+    var within_y = P[1] > R[1] && P[1] < (R[1] + R[3]);
 
     return within_x && within_y;
 }
 
 
-// A and B are two points that form a line segment
-// C is the center of the circle
+// determine if the line through A and B intersects
+// with a circle centered at C with radius r
 export function intersectsCircle(A, B, C, r){
 
     // Establish the different sides of the triangle
@@ -45,18 +63,13 @@ export function intersectsCircle(A, B, C, r){
         0
     ];    
 
-    var bc = [
-        C[0] - B[0],
-        C[1] - B[1],
-        0
-    ];
-
     //Obtain the distance from circle center to the closest point on the line
     var x = mag(cross(ac, ab)) /  mag(ab) ;
 
     return x <= r ;
 }
 
+// return cross product of two vectors
 export function cross(a, b){
 
     return [ 
@@ -66,6 +79,7 @@ export function cross(a, b){
     ];
 }
 
+// return magnitude of vector
 export function mag(vector){
 
     var sum = 0;

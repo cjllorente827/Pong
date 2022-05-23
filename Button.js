@@ -1,4 +1,4 @@
-import { getContext, translateToCanvas } from "./util.js";
+import { getContext, getTranslatedRectangle, pointInRectangle, translateToCanvas } from "./util.js";
 
 export class Button {
     constructor(text, rectangle_specifier){
@@ -13,18 +13,10 @@ export class Button {
     draw(){
         var context = getContext();
 
-        var [canvas_x, canvas_y] = translateToCanvas(this.x, this.y);
-        var [canvas_w, canvas_h] = translateToCanvas(this.width, this.height);
+        var rectangle = getTranslatedRectangle(this);
 
-        var center_x = Math.round(canvas_x + canvas_w/2);
-        var center_y = Math.round(canvas_y + canvas_h/2);
-
-        var rectangle = [
-            canvas_x,
-            canvas_y,
-            canvas_w,
-            canvas_h
-        ];
+        var center_x = Math.round(rectangle[0] + rectangle[2]/2);
+        var center_y = Math.round(rectangle[1] + rectangle[3]/2);
 
         context.globalAlpha = 0.5;
         context.fillStyle = "black";
@@ -39,12 +31,10 @@ export class Button {
 
     hasCursor(mousex, mousey){
         
-        var [canvas_x, canvas_y] = translateToCanvas(this.x, this.y);
-        var [canvas_w, canvas_h] = translateToCanvas(this.width, this.height);
+        var rectangle = getTranslatedRectangle(this);
 
-        var within_x = mousex > canvas_x && mousex < (canvas_x + canvas_w);
-        var within_y = mousey > canvas_y && mousey < (canvas_y + canvas_h);
+        var point = [mousex, mousey];
 
-        return within_x && within_y;
+        return pointInRectangle(point, rectangle);
     }
 }
