@@ -244,12 +244,12 @@ function handleCollisions(){
     // the ball is between the top and bottom of the paddle
     // then a collision has occurred
     var paddle1_collide = ( 
-        ball_top > paddle1_top && ball_bottom < paddle1_bottom &&
+        ball_bottom > paddle1_top && ball_top < paddle1_bottom &&
         intersectsCircle(paddle1_right_A, paddle1_right_B, ball_center, ball.radius) 
     );
 
     var paddle2_collide = ( 
-        ball_top > paddle2_top && ball_bottom < paddle2_bottom &&
+        ball_bottom > paddle2_top && ball_top < paddle2_bottom &&
         intersectsCircle(paddle2_left_A, paddle2_left_B, ball_center, ball.radius) 
     );
 
